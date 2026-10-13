@@ -1,0 +1,87 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=blue]{hyperref}
+\usepackage[T1]{fontenc}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\title{Support projection can destroy backward-error feasibility\\\large Conjecture 00000005137}
+\author{zbw123456}\date{14 October 2026}
+\begin{document}\maketitle
+\textbf{Scope.} We test the stated support-projection rule for matrix-only
+backward error in $Ax=b$, using the Frobenius norm and coordinate projection
+onto the nonzero positions of $A$. These choices are stated explicitly because
+the conjecture does not specify a norm or which input data can be perturbed.
+
+Take
+\[
+ A=\begin{pmatrix}1&1\\0&1\end{pmatrix},\quad
+ x=\binom11,\quad b=\binom32,\quad r=b-Ax=\binom11.
+\]
+The support $S=\{(1,1),(1,2),(2,2)\}$ is a tree in the bipartite row-column
+graph: its path is column 1, row 1, column 2, row 2.
+For $E=\left(\begin{smallmatrix}a&b'\\c&d\end{smallmatrix}\right)$, the backward
+error constraint is
+\[
+ (A+E)x=b\quad\Longleftrightarrow\quad a+b'=1,\quad c+d=1.
+\]
+Define
+\[
+ D=\begin{pmatrix}1/2&1/2\\1/2&1/2\end{pmatrix},\qquad
+ T=\begin{pmatrix}1/2&1/2\\0&1\end{pmatrix}.
+\]
+\begin{theorem}
+$D$ is the unique minimum-Frobenius-norm dense feasible perturbation, with
+$\|D\|_F^2=1$. The minimum supported perturbation is $T$, with
+$\|T\|_F^2=3/2$. The support projection of $D$ is not feasible.
+\end{theorem}
+\begin{proof}
+For every feasible $E$,
+\[
+ \|E\|_F^2
+ =1+\tfrac12(a-b')^2+\tfrac12(c-d)^2\ge1.
+\]
+Equality requires $a=b'$ and $c=d$, so the row sums force all four entries
+to equal $1/2$. Under the support constraint $c=0$, feasibility forces $d=1$,
+and
+\[
+ \|E\|_F^2=\tfrac32+\tfrac12(a-b')^2\ge\tfrac32,
+\]
+with equality at $T$. But
+\[
+ \Pi_S(D)=\begin{pmatrix}1/2&1/2\\0&1/2\end{pmatrix},\qquad
+ \Pi_S(D)x=\binom{1}{1/2}\ne r.
+\]
+Therefore projection of the dense minimizer cannot give a sparse minimizer.
+There is also a strict discrepancy between the two optimal squared norms.
+\end{proof}
+
+\textbf{Formal correspondence.} \texttt{SparseBackward.lean} uses four real
+coordinates for an actual $2\times2$ matrix, explicit matrix-vector multiplication,
+and the actual equation $(A+E)x=b$. Its minimization predicates quantify over
+all four real entries of every competitor. The squared objective is the squared
+Frobenius norm, so it has exactly the same minimizers. Lean proves dense
+optimality, sparse optimality, uniqueness of the dense minimizer, and failure
+of feasibility after projection. In particular,
+\texttt{no\_projected\_dense\_minimizer} excludes every dense minimizer, not just
+a selected feasible perturbation. \texttt{SupportTree.lean} proves Mathlib's connected-and-acyclic tree predicate
+for the four-vertex path. \texttt{support\_correspondence} identifies its
+row-column adjacencies with the actual nonzero entries of $A$.
+\texttt{counterexample\_with\_tree} combines this verified tree support
+with the minimization counterexample.
+
+\textbf{Interpretation limit.} A different norm, perturbations of $b$ as well,
+or a support-aware correction performed \emph{after} projection would define a
+different problem. This result refutes direct coordinate projection under the
+stated model. The competition must decide whether that is the intended meaning
+of its unspecified conversion formula; no acceptance is claimed.
+
+\textbf{Reproduction and sources.} Lean 4.19.0 and pinned Mathlib are specified
+in the project. The final axiom audit contains only \texttt{propext},
+\texttt{Classical.choice}, and \texttt{Quot.sound}. The official bilingual text
+is included. For the distinction between structured and unstructured backward
+error, see D.~J. Higham and N.~J. Higham,
+\href{https://eprints.maths.manchester.ac.uk/347/}{Backward error and condition of structured linear systems} (1992).
+\end{document}
