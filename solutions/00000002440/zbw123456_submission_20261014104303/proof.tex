@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\setlength{\emergencystretch}{3em}
+\begin{document}
+\begin{center}{\Large Third etale homotopy groups cannot be nonabelian}\\[5pt]{\large Conjecture 00000002440}\\[5pt]zbw123456 \quad 14 October 2026\end{center}
+
+We use the standard homotopy-group meaning of $\pi_3^{\mathrm{\acute et}}$, with a geometric base point. In the Artin--Mazur convention, the etale homotopy type is a pointed pro-homotopy type, and its third homotopy pro-group is obtained by taking $\pi_3$ levelwise. The following obstruction holds for every such pro-homotopy type, whether or not it comes from a variety.
+\begin{theorem}
+Every third homotopy group is abelian. Every level of a third homotopy pro-group is abelian, and every group of compatible inverse-limit families is abelian. Thus the nonabelian third group required by Conjecture 00000002440 is impossible.
+\end{theorem}
+\begin{proof}
+Based three-dimensional loops can be composed along two different coordinates. The compositions have the same identity and satisfy the interchange law. The Eckmann--Hilton argument identifies the two compositions and proves that they are commutative on homotopy classes. Hence $\pi_3(Y,y)$ is abelian for every pointed space.
+
+Apply this to every pointed space in any representing pro-system. The resulting pro-group takes values in abelian groups, so it is a pro-abelian group. If the inverse-limit convention is used instead, compatible families form a subgroup of the product of the level groups. Products and subgroups of abelian groups are abelian. Neither smoothness nor finiteness of the first homotopy group affects this obstruction. In particular, an Enriques surface cannot provide the asserted exception.
+\end{proof}
+\textbf{Lean correspondence and boundary.} The project uses Mathlib's actual homotopy groups, defined as quotients of based loops by homotopy, and its proved Eckmann--Hilton instance. \texttt{every\_stage\_abelian} covers every family of pointed spaces. \texttt{compatibleFamilies} constructs the subgroup cut out by arbitrary bonding homomorphisms; \texttt{limit\_abelian} proves its commutativity. The proof is more general than a particular etale construction. It does not construct the etale site of a scheme in Lean: the application to $\pi_3^{\mathrm{\acute et}}$ is the defining levelwise interpretation described above, not an unproved assertion of commutativity inserted as an axiom.
+
+\textbf{Sources.} Artin and Mazur, \emph{Etale Homotopy}, LNM 100 (1969); Friedlander, \href{https://www.numdam.org/article/PMIHES_1973__42__5_0.pdf}{Fibrations in etale homotopy theory}. The fixed Mathlib source used by the project contains the full topological commutativity proof.
+
+
+\textbf{Verification.} Lean 4.19.0 with Mathlib pinned to
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+The accompanying project and verification transcript give the exact theorem and axiom audit. No proof placeholders, native evaluator proof bypass, or custom axiom declarations are used. This is a prepared submission; official acceptance has not been claimed.
+\end{document}
