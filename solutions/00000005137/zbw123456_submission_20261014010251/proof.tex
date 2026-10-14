@@ -9,7 +9,10 @@
 \setlength{\parskip}{6pt}
 \title{Support projection can destroy backward-error feasibility\\\large Conjecture 00000005137}
 \author{zbw123456}\date{14 October 2026}
+\setlength{\emergencystretch}{3em}
 \begin{document}\maketitle
+\textbf{Audit correction: research only.} This is not a complete disproof of Conjecture 00000005137 and is excluded from the completed-solution count. The direct projection calculation remains correct, but does not exclude a normalized support-conversion formula.
+
 \textbf{Scope.} We test the stated support-projection rule for matrix-only
 backward error in $Ax=b$, using the Frobenius norm and coordinate projection
 onto the nonzero positions of $A$. These choices are stated explicitly because
@@ -72,11 +75,18 @@ row-column adjacencies with the actual nonzero entries of $A$.
 \texttt{counterexample\_with\_tree} combines this verified tree support
 with the minimization counterexample.
 
-\textbf{Interpretation limit.} A different norm, perturbations of $b$ as well,
-or a support-aware correction performed \emph{after} projection would define a
-different problem. This result refutes direct coordinate projection under the
-stated model. The competition must decide whether that is the intended meaning
-of its unspecified conversion formula; no acceptance is claimed.
+\textbf{Why this is not a disproof of the full conjecture.}
+The problem does not specify its projection formula or normalization. In this
+same example, the support-aware row correction
+\[
+ N(E)=\begin{pmatrix}E_{11}&E_{12}\\0&2E_{22}\end{pmatrix}
+ \quad\text{satisfies}\quad N(D)=T.
+\]
+Thus a normalized projection recovers the true sparse minimum. Lean verifies
+both this equality and the minimum property.
+The existing calculation excludes only the raw coordinate projection.
+It cannot rule out the unspecified conversion in the official statement.
+No full-conjecture submission or completed-solution credit is claimed.
 
 \textbf{Reproduction and sources.} Lean 4.19.0 and pinned Mathlib are specified
 in the project. The final axiom audit contains only \texttt{propext},

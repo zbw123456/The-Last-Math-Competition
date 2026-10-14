@@ -1,3 +1,10 @@
+AUDIT CORRECTION (14 October 2026): RESEARCH ONLY -- NOT A COMPLETE DISPROOF.
+This file supersedes the previous candidate status. Do not submit as a solution.
+The direct coordinate projection fails, but the original question does not
+specify that conversion. A row-normalized support projection recovers the
+sparse minimum in this very example, as normalized_projection_is_minimum now
+proves. This item is excluded from the completed-solution count and PR drafts.
+
 Conjecture 00000005137: review candidate, not an accepted competition solution.
 
 Scope

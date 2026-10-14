@@ -106,6 +106,20 @@ theorem counterexample_with_tree : SupportTree.supportGraph.IsTree ∧
   ⟨SupportTree.tree,support_correspondence,dense_is_minimum,sparse_is_minimum,
     projection_not_feasible⟩
 
+/-- A support-aware row correction succeeds for this same example.
+This is why failure of raw projection does not refute an unspecified
+normalized conversion formula. -/
+def normalizedProject (E : Mat) : Mat := ⟨E.a,E.b,0,2*E.d⟩
+
+theorem normalized_projection_recovers_sparse : normalizedProject dense = sparse := by
+  unfold normalizedProject dense sparse
+  norm_num
+
+theorem normalized_projection_is_minimum : SparseMinimum (normalizedProject dense) := by
+  rw [normalized_projection_recovers_sparse]
+  exact sparse_is_minimum
+
+#print axioms normalized_projection_is_minimum
 #print axioms counterexample
 #print axioms no_projected_dense_minimizer
 #print axioms counterexample_with_tree

@@ -1,0 +1,13 @@
+Conjecture 00000002440 — local scope audit, 14 October 2026
+
+Status: additional-formal-boundary
+Outcome: mathematical disproof; formal application boundary
+
+Lean proves commutativity for actual third homotopy groups, every stage of any family, and the subgroup of compatible inverse-limit families. The paper applies this universal theorem to the standard levelwise definition of the etale homotopy pro-group. The etale site, the scheme-to-pro-space construction and that identification are not constructed in Lean. Therefore this is an additional mathematical solution with a formally proved obstruction, excluded from the ten complete formal-formulation submissions and held back from PR readiness.
+
+Official snapshot: cce2d90cb298de9595798eb674d2c80712100532
+Both metadata flags are false at this snapshot. This is not official acceptance.
+
+Verification: lake build, strict Lean compilation, printed axiom audit, two pdflatex passes, built-in LaTeX compilation and visual PDF inspection passed. Only propext, Classical.choice and Quot.sound occur in printed dependencies. No custom axioms or proof placeholders occur in the Lean sources.
+
+Reproduction boundary: the local builds used an existing pinned dependency checkout/cache where Mathlib is required. A fresh online dependency download on another machine has not been run. The submission contains portable Git dependency revisions, not the local cache or dependency symlinks.

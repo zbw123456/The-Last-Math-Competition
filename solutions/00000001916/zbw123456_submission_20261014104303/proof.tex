@@ -1,0 +1,34 @@
+\documentclass[11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[T1]{fontenc}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\begin{document}
+\begin{center}{\Large A Dirichlet polynomial with exact maximum N}\\[5pt]{\large Conjecture 00000001916}\\[5pt]zbw123456 \quad 14 October 2026\end{center}
+
+We interpret the conjectured explicit factor as a constant independent of $N$, as required for the stated growth scale. An unrestricted $N$-dependent factor would impose no bound.
+\begin{theorem}
+For the admissible coefficients $a_n=1$,
+\[
+ D_N(t)=\sum_{n=1}^N n^{it},\qquad \sup_{t\in\mathbb R}|D_N(t)|=N.
+\]
+This maximum is not $O\bigl(N^{1/2}(\log\log N)^{1/4}\bigr)$ as $N\to\infty$.
+\end{theorem}
+\begin{proof}
+Every coefficient has modulus one. For real $t$, $n^{it}=\exp(it\log n)$ has modulus one, so the triangle inequality gives $|D_N(t)|\le N$. At $t=0$ each term is one, and equality holds. Thus the supremum is attained and is exactly $N$.
+
+For sufficiently large real $x$, $\log x\ge1$ and
+\[
+0\le(\log\log x)^{1/4}\le(\log x)^{1/4}=o(x^{1/2}).
+\]
+Multiplication by $x^{1/2}$ shows that the claimed scale is $o(x)$. Restricting to positive integers preserves this relation. If $N$ were bounded by a constant times the claimed scale, transitivity would give $N=o(N)$, which is impossible: its defining estimate with constant $1/2$ would give $N\le N/2$ for all sufficiently large positive integers.
+\end{proof}
+\textbf{Lean correspondence.} \texttt{dirichlet} is the actual finite complex exponential sum, indexed by $n+1$ to avoid the logarithm of zero. \texttt{maximum\_exact} proves the \texttt{IsGreatest} property for the range of its norm, so no informal supremum computation is assumed. \texttt{scale\_littleO} uses the proved logarithm--power asymptotics of Mathlib, and \texttt{no\_claimed\_bound} negates the exact big-$O$ assertion. The witness is deterministic, as in the question; no random-coefficient hypothesis appears in its text.
+
+
+\textbf{Verification.} Lean 4.19.0 with Mathlib pinned to
+\texttt{c44e0c8ee63ca166450922a373c7409c5d26b00b}.
+The accompanying project and verification transcript give the exact theorem and axiom audit. No proof placeholders, native evaluator proof bypass, or custom axiom declarations are used. This is a prepared submission; official acceptance has not been claimed.
+\end{document}
