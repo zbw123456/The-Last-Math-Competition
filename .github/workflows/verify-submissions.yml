@@ -1,0 +1,67 @@
+name: Verify competition submissions
+on:
+  push:
+    branches: [work/verify-submissions-20261018]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            solutions/00000001865
+            solutions/00000001916
+            solutions/00000001924
+            solutions/00000002440
+            solutions/00000003898
+            solutions/00000004228
+            solutions/00000004398
+            solutions/00000005030
+            solutions/00000006561
+            solutions/00000006778
+            solutions/00000007762
+      - name: Install Lean and LaTeX
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
+          sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.19.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended
+      - name: Fetch pinned dependencies and Mathlib cache
+        run: |
+          cd solutions/00000001865/zbw123456_submission_20261014104303/lean
+          lake exe cache get
+      - name: Compile every standalone project and audit sources
+        shell: bash
+        run: |
+          mkdir -p verification-results
+          lean --version | tee verification-results/toolchain.txt
+          git rev-parse HEAD > verification-results/commit.txt
+          shared="$PWD/solutions/00000001865/zbw123456_submission_20261014104303/lean/.lake/packages"
+          failed=0
+          for submission in solutions/*/zbw123456_submission_*; do
+            id=$(basename "$(dirname "$submission")")
+            if grep -q 'mathlib' "$submission/lean/lakefile.toml" && [ "$id" != 00000001865 ]; then
+              mkdir -p "$submission/lean/.lake"
+              ln -s "$shared" "$submission/lean/.lake/packages"
+            fi
+            find "$submission/lean" -maxdepth 1 -type f -print0 | sort -z | xargs -0 sha256sum > "verification-results/$id-source-sha256.txt"
+            if sh "$submission/verify.sh" > "verification-results/$id-build.log" 2>&1; then
+              echo "$id PASS" | tee -a verification-results/status.txt
+            else
+              echo "$id FAIL" | tee -a verification-results/status.txt
+              tail -60 "verification-results/$id-build.log"
+              failed=1
+            fi
+            if grep -E 'sorryAx|Lean.ofReduceBool|Lean.trustCompiler' "verification-results/$id-build.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-results
+          path: verification-results
