@@ -13,21 +13,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            solutions/00000001865
-            solutions/00000001404
-            solutions/00000003973
-            solutions/00000006563
+            solutions/00000000209
       - name: Install Lean and LaTeX
         run: |
           curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
           sh /tmp/elan-init.sh -y --default-toolchain leanprover/lean4:v4.19.0
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended
-      - name: Fetch pinned dependencies and Mathlib cache
-        run: |
-          cd solutions/00000001865/zbw123456_submission_20261014104303/lean
-          lake exe cache get
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-latex-extra
       - name: Compile every standalone project and audit sources
         shell: bash
         run: |
@@ -36,7 +29,7 @@ jobs:
           git rev-parse HEAD > verification-results/commit.txt
           shared="$PWD/solutions/00000001865/zbw123456_submission_20261014104303/lean/.lake/packages"
           failed=0
-          for submission in solutions/{00000001404,00000003973,00000006563}/zbw123456_submission_*; do
+          for submission in solutions/00000000209/zbw123456_submission_*; do
             id=$(basename "$(dirname "$submission")")
             if grep -q 'mathlib' "$submission/lean/lakefile.toml" && [ "$id" != 00000001865 ]; then
               mkdir -p "$submission/lean/.lake"
