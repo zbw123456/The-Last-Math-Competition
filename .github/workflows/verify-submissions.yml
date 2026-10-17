@@ -14,16 +14,9 @@ jobs:
         with:
           sparse-checkout: |
             solutions/00000001865
-            solutions/00000001916
-            solutions/00000001924
-            solutions/00000002440
-            solutions/00000003898
-            solutions/00000004228
-            solutions/00000004398
-            solutions/00000005030
-            solutions/00000006561
-            solutions/00000006778
-            solutions/00000007762
+            solutions/00000001404
+            solutions/00000003973
+            solutions/00000006563
       - name: Install Lean and LaTeX
         run: |
           curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o /tmp/elan-init.sh
@@ -43,7 +36,7 @@ jobs:
           git rev-parse HEAD > verification-results/commit.txt
           shared="$PWD/solutions/00000001865/zbw123456_submission_20261014104303/lean/.lake/packages"
           failed=0
-          for submission in solutions/*/zbw123456_submission_*; do
+          for submission in solutions/{00000001404,00000003973,00000006563}/zbw123456_submission_*; do
             id=$(basename "$(dirname "$submission")")
             if grep -q 'mathlib' "$submission/lean/lakefile.toml" && [ "$id" != 00000001865 ]; then
               mkdir -p "$submission/lean/.lake"
