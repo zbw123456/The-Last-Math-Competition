@@ -1,4 +1,5 @@
 import Mathlib.Data.Int.Basic
+import Mathlib.Algebra.Group.Int.Defs
 import Mathlib.Data.Set.Countable
 
 namespace ZeroInvariant
@@ -29,6 +30,7 @@ theorem conjecture {S : Type u} (e : S) (sum : S → S → S)
   exact (hM rfl).elim
 
 theorem target_is_countable : Countable ℤ := inferInstance
+example : AddCommGroup ℤ := inferInstance
 theorem target_is_abelian : ∀ a b : ℤ, a+b = b+a := add_comm
 #print axioms conjecture
 #print axioms nonzero_obstructs
